@@ -103,8 +103,9 @@ function ChatSection() {
         return;
       }
 
+      const API_BASE = import.meta.env.VITE_API_BASE || "";
       const token = await user.getIdToken();
-      const res = await fetch("/chat", {
+      const res = await fetch(`${API_BASE}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
