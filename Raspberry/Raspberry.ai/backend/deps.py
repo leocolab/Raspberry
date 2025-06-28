@@ -14,11 +14,16 @@ from firebase_admin import auth as fb_auth, credentials, initialize_app
 from google.cloud import firestore
 
 # Use env variable to find service account path
-cred_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-if not cred_path:
-    raise RuntimeError("Missing GOOGLE_APPLICATION_CREDENTIALS in .env")
+b64_key = os.getenv("FIREBASE_CREDENTIALS_BASE64")
 
-cred = credentials.Certificate(cred_path)
+if b64_key:
+    cred_dict = json.loads(base64.b64decode(b64_key).decode())
+    cred = credentials.Certificate(cred_dict)
+else:
+    # 2) Fallback to local file for dev –––––––––––––––––––––––––––
+    cred = credentials.Certificate("backend/serviceAccountKey.json")
+    # (make sure this file is in .gitignore)
+
 initialize_app(cred)
 db = firestore.Client()
 PROMPT_LIMIT = 5
