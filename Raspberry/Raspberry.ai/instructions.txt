@@ -1,0 +1,21 @@
+
+Instructions:
+
+in / Rapsberry:
+
+1. Select interpreper (one with venv)
+2. .\.venv\Scripts\Activate
+3. uvicorn backend.api:app --port 8000
+
+4. cd frontend
+   npm run dev
+
+
+
+Notes for transition:
+
+Make sure to isntall v3 of tailwind (not v4) glitchy:
+
+   SUMMARY: If you want to use version 3.x, use the following command:
+npm install -D tailwindcss@3 postcss auto-prefixer
+npx tailwindcss init -p 
