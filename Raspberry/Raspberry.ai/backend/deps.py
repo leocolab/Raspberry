@@ -4,6 +4,8 @@ import firebase_admin
 from firebase_admin import auth as fb_auth, credentials
 from google.cloud import firestore
 import os
+import json
+import base64
 from dotenv import load_dotenv
 
 # Initialise Firebase Admin once
