@@ -13,7 +13,7 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
 
 from fastapi import Depends, HTTPException, status
 from firebase_admin import auth as fb_auth, credentials, initialize_app
-from google.cloud import firestore
+from firebase_admin import firestore
 
 # Use env variable to find service account path
 b64_key = os.getenv("FIREBASE_CREDENTIALS_BASE64")
@@ -27,7 +27,7 @@ else:
     # (make sure this file is in .gitignore)
 
 initialize_app(cred)
-db = firestore.Client()
+db = firestore.client()
 PROMPT_LIMIT = 5
 
 # ------------------------------------------------------------------
