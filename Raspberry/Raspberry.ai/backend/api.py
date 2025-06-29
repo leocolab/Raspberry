@@ -5,6 +5,16 @@ from .deps import quota_guard  # You must have this set up
 
 app = FastAPI()
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://raspberry-two.vercel.app"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 class ChatReq(BaseModel):
     provider: str   # "openai" | "gemini" | "claude"
     prompt: str

@@ -24,7 +24,6 @@ dist-ssr
 *.sw?
 .env
 .env.*
-*.json
 backend/serviceAccountKey.json
 __pycache__/
 node_modules/
