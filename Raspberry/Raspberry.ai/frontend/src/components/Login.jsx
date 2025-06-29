@@ -87,7 +87,7 @@ export default function Login() {
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               <strong>Beta notice:</strong> you get <strong>5 free chats</strong> to try the app.
-              No credit card required. <br />Create an account below: type in an email, passowrd, then hit "Sign UP", or use&nbsp;Google.
+              No credit card required. <br /><strong>Create an account below:</strong> <br />Type in an email, passowrd, then hit "Sign UP", or use&nbsp;Google.
             </p>
             <Button onClick={() => setShowInfo(false)} className="w-full">
               Try&nbsp;for&nbsp;free
