@@ -7,7 +7,7 @@ import { getAuth } from "firebase/auth";          // ← NEW
 const Button = ({ children, className = "", ...props }) => (
   <button
     {...props}
-    className={`px-4 py-2 rounded-lg font-medium bg-[#E30B5C] hover:bg-[#B1124D] text-white disabled:opacity-60 ${className}`}
+    className={`px-4 py-2 rounded-lg bg-[#E30B5C] hover:bg-[#B1124D] text-white disabled:opacity-60 ${className}`}
   >
     {children}
   </button>
@@ -59,20 +59,20 @@ function WelcomeSection() {
     <section id="welcome" className="relative h-screen w-full overflow-hidden">
       <Parallax speed={-190} className="absolute inset-0 -z-10">
         <img
-          src="/raspberrypic.webp"
+          src="/gBG.png"
           alt="Raspberrry Hero Background"
           className="object-cover w-full h-full"
         />
       </Parallax>
       <div className="relative flex flex-col items-center justify-center h-full bg-black/40">
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white drop-shadow-lg">
-          Raspberrry
+          Raspberry AI
         </h1>
         <p className="mt-4 text-lg md:text-2xl text-white opacity-90">
           One prompt. <em>Any</em> model.
         </p>
         <Button
-          className="mt-10"
+          className="mt-10 bg-[linear-gradient(45deg,_#e30b5c_25%,_transparent_25%,_transparent_50%,_#e30b5c_50%,_#e30b5c_75%,_transparent_75%,_transparent)] bg-[length:16px_16px] font-bold"
           onClick={() =>
             document.getElementById("chat")?.scrollIntoView({ behavior: "smooth" })
           }
@@ -89,6 +89,12 @@ function ChatSection() {
   const [model, setModel] = useState("openai");
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showHint, setShowHint] = useState(true);
+
+  const handleModelChange = (val) => {
+    setModel(val);
+    setShowHint(false);          // hide popup after first interaction
+  };
 
   /* ---------- UPDATED send() ---------- */
   const send = async () => {
@@ -115,7 +121,7 @@ function ChatSection() {
       });
 
       if (res.status === 429) {
-        setAnswer("You’ve used all 5 free prompts. Upgrade coming soon!");
+        setAnswer("You’ve used all 5 free prompts. Stay tuned for Raspberry AI's full release!");
         return;
       }
 
@@ -147,11 +153,18 @@ function ChatSection() {
             onChange={(e) => setPrompt(e.target.value)}
           />
           <div className="flex flex-col md:flex-row items-center gap-4">
-            <Select value={model} onChange={setModel}>
+          <div className="relative">
+            {showHint && (
+              <div className="absolute -right-2 -top-9 bg-blue-400 text-white text-xs font-semibold px-3 py-1 rounded-lg shadow-lg animate-bounce">
+                Choose your AI model
+              </div>
+            )}
+            <Select value={model} onChange={handleModelChange}>
               <SelectItem value="openai">OpenAI</SelectItem>
               <SelectItem value="gemini">Gemini</SelectItem>
               <SelectItem value="claude">Claude</SelectItem>
             </Select>
+          </div>
             <Button onClick={send} disabled={loading} className="w-full md:w-auto">
               {loading ? "Thinking..." : "Ask"}
             </Button>
