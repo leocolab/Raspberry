@@ -5,9 +5,36 @@
     <link rel="icon" type="image/svg+xml" href="/RB Logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Raspberry AI</title>
+
+    <!-- LinkedIn in-app-browser redirect: bump user into a secure browser
+         before any Firebase / Google OAuth code runs -->
+    <script>
+      (function () {
+        const ua = navigator.userAgent || "";
+        if (!ua.includes("LinkedInApp")) return;          // only LinkedIn web-view
+
+        const here = location.href;
+
+        /* ----- iOS: switch to Safari ----- */
+        if (/iPad|iPhone|iPod/.test(ua)) {
+          window.location.href = "com-apple-mobilesafari-tab:" + here;
+          return;
+        }
+
+        /* ----- Android: switch to Chrome ----- */
+        if (/Android/i.test(ua)) {
+          const stripped = here.replace(/^https?:\/\//, "");
+          window.location.href =
+            "intent://" +
+            stripped +
+            "#Intent;scheme=https;package=com.android.chrome;end";
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
+
