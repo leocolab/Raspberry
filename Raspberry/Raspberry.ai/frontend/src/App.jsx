@@ -143,7 +143,14 @@ function ChatSection() {
       id="chat"
       className="min-h-screen flex flex-col items-center justify-start pt-24 pb-16 px-4 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950"
     >
-      <h2 className="text-4xl font-semibold mb-8">Chat Playground</h2>
+      <h2 className="mb-8 flex items-center gap-3 text-4xl font-semibold">
+        Chat Playground
+        <img
+          src="/RB Logo.png"        // update path if needed
+          alt="Raspberry logo"
+          className="w-8 h-8 md:w-10 md:h-10"
+        />
+      </h2>
       <Card className="w-full max-w-3xl shadow-lg">
         <CardContent className="space-y-6">
           <textarea
@@ -152,19 +159,23 @@ function ChatSection() {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
           />
-          <div className="flex flex-col md:flex-row items-center gap-4">
-          <div className="relative">
+          <div className="relative flex flex-row flex-wrap items-center gap-4">
             {showHint && (
-              <div className="absolute -right-2 -top-9 bg-blue-400 text-white text-xs font-semibold px-3 py-1 rounded-lg shadow-lg animate-bounce">
+              <div className="animate-bounce px-4 py-2 rounded-lg font-bold text-sm
+                              bg-blue-400 text-white
+                              shadow-[0_0_6px_#60A5FA] whitespace-nowrap">
                 Choose your AI model
               </div>
             )}
+
+            {/* selector */}
             <Select value={model} onChange={handleModelChange}>
               <SelectItem value="openai">OpenAI</SelectItem>
               <SelectItem value="gemini">Gemini</SelectItem>
               <SelectItem value="claude">Claude</SelectItem>
             </Select>
-          </div>
+
+            {/* ask button */}
             <Button onClick={send} disabled={loading} className="w-full md:w-auto">
               {loading ? "Thinking..." : "Ask"}
             </Button>
