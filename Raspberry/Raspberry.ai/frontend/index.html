@@ -6,35 +6,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Raspberry AI</title>
 
-    <!-- LinkedIn in-app-browser redirect: bump user into a secure browser
-         before any Firebase / Google OAuth code runs -->
+    <!-- If loaded inside LinkedIn's web-view, show a "Open in Browser" prompt -->
     <script>
       (function () {
         const ua = navigator.userAgent || "";
-        if (!ua.includes("LinkedInApp")) return;          // only LinkedIn web-view
 
+        const inLinkedIn = ua.includes("LinkedInApp");
+        const isiOS      = /iPad|iPhone|iPod/.test(ua);
+        const isAndroid  = /Android/i.test(ua);
+
+        if (!(inLinkedIn && (isiOS || isAndroid))) return;  // Already in a real browser
+
+        /* ----- Build the fallback page dynamically ----- */
         const here = location.href;
+        const body = document.body;
+        body.innerHTML = "";              // Clear any existing markup
+        body.style.cssText =
+          "display:flex;align-items:center;justify-content:center;" +
+          "min-height:100vh;font:16px/1.4 -apple-system, BlinkMacSystemFont, " +
+          "'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;" +
+          "padding:2rem;text-align:center;";
 
-        /* ----- iOS: switch to Safari ----- */
-        if (/iPad|iPhone|iPod/.test(ua)) {
-          window.location.href = "com-apple-mobilesafari-tab:" + here;
-          return;
-        }
+        const container = document.createElement("div");
+        container.style.maxWidth = "420px";
 
-        /* ----- Android: switch to Chrome ----- */
-        if (/Android/i.test(ua)) {
-          const stripped = here.replace(/^https?:\/\//, "");
-          window.location.href =
-            "intent://" +
-            stripped +
-            "#Intent;scheme=https;package=com.android.chrome;end";
-        }
+        const msg = document.createElement("p");
+        msg.innerHTML =
+          "Google sign-in needs a secure browser.<br>" +
+          "Please tap the button below to open Raspberry AI in Safari or Chrome.";
+
+        const btn = document.createElement("button");
+        btn.textContent = "Open in Browser";
+        btn.style.cssText =
+          "margin-top:1.5rem;padding:0.75rem 1.5rem;font-size:1rem;" +
+          "border:none;border-radius:0.5rem;background:#E30B5C;color:#fff;" +
+          "cursor:pointer;";
+
+        btn.onclick = () => {
+          if (isiOS) {
+            /* On iOS this pops Safari */
+            window.open(here, "_blank");
+          } else {
+            /* Android Chrome intent */
+            const stripped = here.replace(/^https?:\/\//, "");
+            location.href =
+              "intent://" + stripped +
+              "#Intent;scheme=https;package=com.android.chrome;end";
+          }
+        };
+
+        container.appendChild(msg);
+        container.appendChild(btn);
+        body.appendChild(container);
       })();
     </script>
   </head>
   <body>
+    <!-- Your normal React root. It will only render when NOT in LinkedIn web-view -->
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
-
