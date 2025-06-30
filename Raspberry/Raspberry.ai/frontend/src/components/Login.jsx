@@ -141,7 +141,7 @@ export default function Login() {
             />
             <input
               type="password"
-              placeholder="Make (or enter an existing) Password"
+              placeholder="Make (or Enter an Existing) Password"
               value={pass}
               onChange={(e) => setPass(e.target.value)}
               className={`w-full p-3 border rounded-lg dark:bg-gray-800 dark:border-gray-700 ${
